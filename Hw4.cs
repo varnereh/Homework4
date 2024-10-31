@@ -34,12 +34,14 @@ public class Hw4
 
         // TODO: your code goes here
        
+
         // CommonCityNames
         var states = LoadStates("states.txt");
         var commonCities = FindCommonCities("zipcodes.txt", states);
         OutputCommonCities("CommonCityNames.txt", commonCities);
-        // LatLon
 
+        // LatLon
+        var latLonValues = GetLatLon("zips.txt", "zipcodes.txt");
         // CityStates
 
 
@@ -60,6 +62,10 @@ public class Hw4
     } // end main
 
         
+
+
+
+    //===================================================================CommonCityNames==========================================
     /*
     Method to load all entered states in states.txt
     */
@@ -140,5 +146,37 @@ public class Hw4
         }
     }
 
+    //===================================================================LatLon==============================================
+
+    /*
+    Method to retrieve Lat and Lon of respective zip codes in zips.txt
+    */
+    static Dictionary<string, string> GetLatLon(string zipsFile, string zipcodesFile)
+    {
+        // although for a small purpose, I did use a lambda function here to trim the lines
+        // ChatGPT assisted me in making sure this was correctly formatted
+        // get zip codes from zips.txt
+        var zipCodes = new HashSet<string>(File.ReadLines(zipsFile).Select(line => line.Trim()));
+        // make a dictionary for lat and lon
+        var latLonValues = new Dictionary<string, string>();
+
+        // for each line in zipcodes.txt, assign relevant parts of each line to variables
+        foreach (var line in File.ReadLines(zipcodesFile))
+        {
+            // split each line and assign parts to variables
+            var splitLine = line.Split('\t');
+            var zip = splitLine[1];
+            var lat = splitLine[6];
+            var lon = splitLine[7];
+
+            // check if already exists--to avoid duplicates
+            if (zipCodes.Contains(zip) && !latLonValues.ContainsKey(zip))
+            {
+                // update
+                latLonValues[zip] = $"{lat} {lon}";
+            }
+        }
+        return latLonValues;
+    }
 
 } // end class
