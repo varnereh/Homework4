@@ -36,6 +36,7 @@ public class Hw4
        
         // CommonCityNames
         var states = LoadStates("states.txt");
+        var commonCities = FindCommonCities("zipcodes.txt", states);
 
         // LatLon
 
@@ -59,24 +60,71 @@ public class Hw4
     } // end main
 
         
-        /*
-
-
-        */
-        static HashSet<string> LoadStates(string filename)
+    /*
+    Method to load all entered states in states.txt
+    */
+    static HashSet<string> LoadStates(string filename)
+    {
+        var states = new HashSet<string>();
+        // read through each line in file
+        foreach (var line in File.ReadLines(filename))
         {
-            var states = new HashSet<string>();
-            foreach (var line in File.ReadLines(filename))
+            // split data and add each entry into HashSet 
+            var stateNames = line.Split(' ');
+            foreach (var state in stateNames)
             {
-                var stateNames = line.Split(' ');
-                foreach (var state in stateNames)
-                {
-                    states.Add(state);
-                }
+                states.Add(state);
             }
-            return states;
+        }
+        return states;
+    }
+
+    /*
+    Method to find the common cities among states listed in states.txt
+    */
+    static SortedSet<string> FindCommonCities(string zipcodesFile, HashSet<string> states)
+    {
+        // hashset to remove duplicates in result. this is a set of the cities and all the states they appear in 
+        var cityStates = new Dictionary<string, HashSet<string>>();
+
+        // load and read all lines from zipcodes.txt
+        foreach (var line in File.ReadLines(zipcodesFile))
+        {
+            // parse through each part of the line and split it by tab
+            var fields = line.Split('\t');
+            var state = fields[4];
+
+            // only check relevant states
+            if (states.Contains(state))
+            {
+              var city = fields[3];
+              // if city isn't already in the dictionary, add it with a corresponding hashset
+              if (!cityStates.ContainsKey(city))
+              {
+                cityStates[city] = new HashSet<string>();
+              }
+                cityStates[city].Add(state);
+            } 
+            else 
+            {
+              // continue loop to ignore cases of irrelevant states
+              continue;
+            }
         }
 
+        // sortedset to sort the results
+        var commonCities = new SortedSet<string>();
+        foreach (var city in cityStates.Keys)
+        {
+            // loop over all answers and determine which intersect 
+            // ChatGPT assisted in utilization of IsSupersetOf() method
+            if (cityStates[city].IsSupersetOf(states))
+            {
+                commonCities.Add(city);
+            }
+        }
+        return commonCities;
+    }
 
 
 
