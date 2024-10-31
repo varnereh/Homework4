@@ -42,6 +42,7 @@ public class Hw4
 
         // LatLon
         var latLonValues = GetLatLon("zips.txt", "zipcodes.txt");
+        OutputLatLon("LatLon.txt", latLonValues);
         // CityStates
 
 
@@ -177,6 +178,20 @@ public class Hw4
             }
         }
         return latLonValues;
+    }
+
+    /*
+    Method to output the latlon data to an output file
+    */
+    static void OutputLatLon(string filename, Dictionary<string, string> latLonData)
+    {
+        using (var writer = new StreamWriter(filename))
+        {
+            foreach (var zip in latLonData.Keys)
+            {
+                writer.WriteLine($"{latLonData[zip]}");
+            }
+        }
     }
 
 } // end class
