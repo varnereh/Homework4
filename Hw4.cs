@@ -37,7 +37,7 @@ public class Hw4
         // CommonCityNames
         var states = LoadStates("states.txt");
         var commonCities = FindCommonCities("zipcodes.txt", states);
-
+        OutputCommonCities("CommonCityNames.txt", commonCities);
         // LatLon
 
         // CityStates
@@ -126,6 +126,19 @@ public class Hw4
         return commonCities;
     }
 
+    /*
+    Method to write output to output file of common cities
+    */
+    static void OutputCommonCities(string filename, SortedSet<string> commonCities)
+    {
+        using (var writer = new StreamWriter(filename))
+        {
+            foreach (var city in commonCities)
+            {
+                writer.WriteLine(city);
+            }
+        }
+    }
 
 
 } // end class
