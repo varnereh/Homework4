@@ -14,9 +14,6 @@
   /*
   1- => Used Lambda in line/s: 167, 215, 250
   */
-  
-  
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,11 +30,8 @@ public class Hw4
         // Do not add or change anything above, inside the 
         // Main method
         // ============================
-
-
         // TODO: your code goes here
        
-
         // CommonCityNames
         var states = LoadStates("states.txt");
         var commonCities = FindCommonCities("zipcodes.txt", states);
@@ -52,7 +46,6 @@ public class Hw4
         // OutputCityStates("CityStates.txt", cityStatesValues);
         var cityStatesValues = GetCityStates("cities.txt", "zipcodes.txt");
         OutputCityStates("CityStates.txt", cityStatesValues, "cities.txt");
-
 
         // ============================
         // Do not add or change anything below, inside the 
@@ -74,6 +67,8 @@ public class Hw4
 
 
     //===================================================================CommonCityNames==========================================
+
+
     /*
     Method to load all entered states in states.txt
     */
@@ -92,6 +87,7 @@ public class Hw4
         }
         return states;
     }
+
 
     /*
     Method to find the common cities among states listed in states.txt
@@ -140,6 +136,7 @@ public class Hw4
         return commonCities;
     }
 
+
     /*
     Method to write output to output file of common cities
     */
@@ -154,7 +151,9 @@ public class Hw4
         }
     }
 
+
     //===================================================================LatLon==============================================
+
 
     /*
     Method to retrieve Lat and Lon of respective zip codes in zips.txt
@@ -187,6 +186,7 @@ public class Hw4
         return latLonValues;
     }
 
+
     /*
     Method to output the latlon data to an output file
     */
@@ -200,7 +200,6 @@ public class Hw4
             }
         }
     }
-
 
 
     //===================================================================CityStates==============================================
@@ -237,7 +236,7 @@ public class Hw4
         return cityStatesValues;
     }
 
-   
+
     // /*
     // Method to output the CityStates results to an output file
     // */
@@ -262,5 +261,4 @@ public class Hw4
             }
         }
     }
-
 } // end class
