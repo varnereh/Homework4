@@ -10,8 +10,11 @@
   will use the hw4 class to execute and evaluate your work.
   */
   // BONUS POINT:
-  // => Used Pointers from lines 10 to 15 <=
-  // => Used Pointers from lines 40 to 63 <=
+
+  /*
+  1- => Used Lambda in line/s: 167, 215, 250
+  */
+  
   
 
 using System;
@@ -45,8 +48,10 @@ public class Hw4
         OutputLatLon("LatLon.txt", latLonValues);
 
         // CityStates
+        // var cityStatesValues = GetCityStates("cities.txt", "zipcodes.txt");
+        // OutputCityStates("CityStates.txt", cityStatesValues);
         var cityStatesValues = GetCityStates("cities.txt", "zipcodes.txt");
-        OutputCityStates("CityStates.txt", cityStatesValues);
+        OutputCityStates("CityStates.txt", cityStatesValues, "cities.txt");
 
 
         // ============================
@@ -200,52 +205,62 @@ public class Hw4
 
     //===================================================================CityStates==============================================
 
+    
     /*
     Method to find all states in which a city is present based on cities.txt
     */
     static Dictionary<string, SortedSet<string>> GetCityStates(string citiesFile, string zipcodesFile)
     {
-        // make hashset to avoid duplicates. Utilized lambda to capitalize and trim inputs from cities.txt because
-        // they may be in the format of "Oxford" when in zipcodes.txt is in the format of "OXFORD". This helps
-        // format my code. ChatGPT assisted me in making this line possible
+        // Read cities from citiesFile into a HashSet, ensuring uppercase and trimmed format
         var cities = new HashSet<string>(File.ReadLines(citiesFile).Select(line => line.ToUpper().Trim()));
         var cityStatesValues = new Dictionary<string, SortedSet<string>>();
 
-        // go through each line in zipcodes.txt and parse through them, putting relevant parts in variables
+        // Process each line in zipcodesFile to associate cities with states
         foreach (var line in File.ReadLines(zipcodesFile))
         {
             var fields = line.Split('\t');
-            var city = fields[3].Trim();
+            var city = fields[3].Trim().ToUpper();
             var state = fields[4].Trim();
 
-            // check if city is in set
+            // Check if city is in cities set
             if (cities.Contains(city))
+            {
+                // Initialize a new sorted set if the city key does not exist
+                if (!cityStatesValues.ContainsKey(city))
                 {
-                    // same idea as above methods. add and update where relevant
-                    if (!cityStatesValues.ContainsKey(city))
-                    {
-                        cityStatesValues[city] = new SortedSet<string>();
-                    }
-                    cityStatesValues[city].Add(state);
+                    cityStatesValues[city] = new SortedSet<string>();
                 }
+                // Add the state to the city's set
+                cityStatesValues[city].Add(state);
             }
+        }
         return cityStatesValues;
     }
 
-
-    /*
-    Method to output the CityStates results to an output file
-    */
-    static void OutputCityStates(string filename, Dictionary<string, SortedSet<string>> cityStatesData)
+   
+    // /*
+    // Method to output the CityStates results to an output file
+    // */
+    static void OutputCityStates(string filename, Dictionary<string, SortedSet<string>> cityStatesData, string citiesFile)
     {
         using (var writer = new StreamWriter(filename))
         {
-            foreach (var city in cityStatesData.Keys)
+            // Read cities in the original order from citiesFile. ChatGPT helped me here a bit as well with 
+            // noticing that this would fix the error in my results
+            foreach (var city in File.ReadLines(citiesFile).Select(line => line.Trim().ToUpper()))
             {
-                writer.WriteLine($"{string.Join(" ", cityStatesData[city])}");
+                if (cityStatesData.ContainsKey(city))
+                {
+                    var states = cityStatesData[city];
+                    writer.WriteLine($"{string.Join(" ", states)}");
+                }
+                else
+                {
+                    // added case for which no state exists
+                    writer.WriteLine($"{city}: No matching states found.");
+                }
             }
         }
     }
-    
 
 } // end class
