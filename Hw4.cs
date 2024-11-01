@@ -43,8 +43,10 @@ public class Hw4
         // LatLon
         var latLonValues = GetLatLon("zips.txt", "zipcodes.txt");
         OutputLatLon("LatLon.txt", latLonValues);
-        // CityStates
 
+        // CityStates
+        var cityStatesValues = GetCityStates("cities.txt", "zipcodes.txt");
+        // OutputCityStates("CityStates.txt", cityStatesValues);  will likely be same idea as above
 
 
         // ============================
@@ -193,5 +195,31 @@ public class Hw4
             }
         }
     }
+
+
+
+    //===================================================================CityStates==============================================
+
+    /*
+    Method to find all states in which a city is present based on cities.txt
+    */
+    static Dictionary<string, SortedSet<string>> GetCityStates(string citiesFile, string zipcodesFile)
+    {
+        // make hashset to avoid duplicates. Utilized lambda to capitalize and trim inputs from cities.txt because
+        // they may be in the format of "Oxford" when in zipcodes.txt is in the format of "OXFORD". This helps
+        // format my code
+        var cities = new HashSet<string>(File.ReadLines(citiesFile).Select(line => line.ToUpper().Trim()));
+        var cityStatesData = new Dictionary<string, SortedSet<string>>();
+
+        // go through each line in zipcodes.txt and parse through them, putting relevant parts in variables
+        foreach (var line in File.ReadLines(zipcodesFile))
+        {
+            var fields = line.Split('\t');
+            var city = fields[3].Trim();
+            var state = fields[4].Trim();
+        }
+    }
+
+    
 
 } // end class
