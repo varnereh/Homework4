@@ -46,7 +46,7 @@ public class Hw4
 
         // CityStates
         var cityStatesValues = GetCityStates("cities.txt", "zipcodes.txt");
-        // OutputCityStates("CityStates.txt", cityStatesValues);  will likely be same idea as above
+        // OutputCityStates("CityStates.txt", cityStatesValues);
 
 
         // ============================
@@ -207,9 +207,9 @@ public class Hw4
     {
         // make hashset to avoid duplicates. Utilized lambda to capitalize and trim inputs from cities.txt because
         // they may be in the format of "Oxford" when in zipcodes.txt is in the format of "OXFORD". This helps
-        // format my code
+        // format my code. ChatGPT assisted me in making this line possible
         var cities = new HashSet<string>(File.ReadLines(citiesFile).Select(line => line.ToUpper().Trim()));
-        var cityStatesData = new Dictionary<string, SortedSet<string>>();
+        var cityStatesValues = new Dictionary<string, SortedSet<string>>();
 
         // go through each line in zipcodes.txt and parse through them, putting relevant parts in variables
         foreach (var line in File.ReadLines(zipcodesFile))
@@ -217,7 +217,19 @@ public class Hw4
             var fields = line.Split('\t');
             var city = fields[3].Trim();
             var state = fields[4].Trim();
-        }
+
+            // check if city is in set
+            if (cities.Contains(city))
+                {
+                    // same idea as above methods. add and update where relevant
+                    if (!cityStatesValues.ContainsKey(city))
+                    {
+                        cityStatesValues[city] = new SortedSet<string>();
+                    }
+                    cityStatesValues[city].Add(state);
+                }
+            }
+        return cityStatesValues;
     }
 
     
