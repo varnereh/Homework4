@@ -46,7 +46,7 @@ public class Hw4
 
         // CityStates
         var cityStatesValues = GetCityStates("cities.txt", "zipcodes.txt");
-        // OutputCityStates("CityStates.txt", cityStatesValues);
+        OutputCityStates("CityStates.txt", cityStatesValues);
 
 
         // ============================
@@ -232,6 +232,20 @@ public class Hw4
         return cityStatesValues;
     }
 
+
+    /*
+    Method to output the CityStates results to an output file
+    */
+    static void OutputCityStates(string filename, Dictionary<string, SortedSet<string>> cityStatesData)
+    {
+        using (var writer = new StreamWriter(filename))
+        {
+            foreach (var city in cityStatesData.Keys)
+            {
+                writer.WriteLine($"{string.Join(" ", cityStatesData[city])}");
+            }
+        }
+    }
     
 
 } // end class
